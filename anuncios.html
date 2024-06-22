@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Video Player</title>
+  <style>
+    body {
+    background-image: url('https://assets.codepen.io/1890963/bg-1--300%402x.4b7178145e2885f8467a7357e2d15971_1.jpg?format=auto'); /* Ruta relativa o absoluta de tu imagen */
+    background-size: cover; /* Ajusta la imagen para cubrir todo el fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    /* Puedes ajustar otros estilos según necesites */
+}
+    
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .custom-video-player {
+      position: relative;
+      max-width: 600px; /* Ancho máximo del reproductor */
+      text-align: center; /* Centrar elementos dentro del contenedor */
+    }
+    video {
+      width: 100%; /* Que el video ocupe todo el ancho disponible */
+      display: block;
+    }
+    .controls {
+      position: absolute; /* Posición absoluta para los controles */
+      top: 0; /* Alinear al principio del contenedor */
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 0px;
+      box-sizing: border-box; /* Incluir padding en el ancho total */
+      display: flex;
+      align-items: center;
+      justify-content: left; /* Centrar elementos horizontalmente */
+    }
+    .controls p {
+      margin: 0 10px 0 0;
+      color: white;
+    }
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin: 0 5px;
+    }
+    button:hover {
+      opacity: 0.7;
+    }
+    button:focus {
+      outline: none;
+    }
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%; /* Ocupar todo el ancho disponible */
+      height: 5px;
+      background-color: yellow;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-video-player">
+    <div class="controls">
+      <p>Anuncio</p>
+    
+    </div>
+    <video id="videoPlayer" autoplay muted>
+      <source src="https://proton-uploads-production.s3.amazonaws.com/3a7293cd0d650385cacfaaee206ec2cc9362c6629eab4fbf1dae4adeff82bb4f.mp4" type="video/mp4">
+      <!-- Incluye un source para el video -->
+    </video>
+    <div class="progress-bar"></div>
+  </div>
+
+  <script>
+    const video = document.getElementById('videoPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const progressBar = document.querySelector('.progress-bar');
+
+    video.addEventListener('timeupdate', function() {
+      const progress = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = progress + '%';
+    });
+
+    video.addEventListener('ended', function() {
+      // Redirigir al usuario al finalizar el video
+      window.location.href = 'peliculas.html'; // Cambiar URL a la deseada
+    });
+
+    playPauseBtn.addEventListener('click', function() {
+      if (video.paused || video.ended) {
+        video.play();
+        playPauseBtn.innerHTML = '<img src="https://adalo-uploads.imgix.net/dd966241863a6c66773193b8298df634b431344cda94291724c70e1371fd255e.png?orient=&auto=compress" alt="Pause">';
+      } else {
+        video.pause();
+        playPauseBtn.innerHTML = '<img src="https://adalo-uploads.imgix.net/dd966241863a6c66773193b8298df634b431344cda94291724c70e1371fd255e.png?orient=&auto=compress" alt="Play">';
+      }
+    });
+
+    muteBtn.addEventListener('click', function() {
+      video.muted = !video.muted;
+      if (video.muted) {
+        muteBtn.innerHTML = '<img src="https://adalo-uploads.imgix.net/bb5d809acc413bdf157c9f9d46f4bdd0433a1c1a48ca555ef752d3de27fdca7f.png?orient=&auto=compress" alt="Mute">';
+      } else {
+        muteBtn.innerHTML = '<img src="https://adalo-uploads.imgix.net/2d78db514a77e9bfd29a762627f4f351cdbcf678ef05173228678923d4f08480.png?orient=&auto=compress" alt="Volume">';
+      }
+    });
+
+    // Mostrar el botón de pausa al cargar el video
+    video.addEventListener('loadedmetadata', function() {
+      playPauseBtn.innerHTML = '<img src="https://adalo-uploads.imgix.net/dd966241863a6c66773193b8298df634b431344cda94291724c70e1371fd255e.png?orient=&auto=compress" alt="Play">';
+    });
+
+    // Al cargar la página, comenzar con el video
+    video.play();
+  </script>
+</body>
+</html>
